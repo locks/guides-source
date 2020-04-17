@@ -39,9 +39,6 @@ jobs:
         with:
           node-version: 12.x
   
-      - name: Ember Asset Size
-        uses: simplabs/ember-asset-size-action@master
-
       - run: npm install --frozen-lockfile --non-interactive
       - run: npm test
 
