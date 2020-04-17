@@ -1,0 +1,47 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: 
+      - master
+  pull_request:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  linting:
+  name: Linting
+  runs-on: ubuntu-latest
+
+  steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+
+    - run: npm install --frozen-lockfile --non-interactive
+    - run: npm lint
+
+  tests:
+    name: "Basic Tests - ${{ matrix.os }}"
+    runs-on: "${{ matrix.os }}-latest"
+
+    strategy:
+      matrix:
+        os: [ubuntu, macOS, windows]
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+  
+      - name: Ember Asset Size
+        uses: simplabs/ember-asset-size-action@master
+
+      - run: npm install --frozen-lockfile --non-interactive
+      - run: npm test
+
